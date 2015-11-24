@@ -63,6 +63,10 @@ def ungz(args):
 
 if __name__ == '__main__':
     
+    #===========================================================================
+    # Below are parameters to be changed for your particular setup.
+    #===========================================================================
+    
     # This is where you should specify the path to the .tar file to be unpacked
     
     tarPathName = "/media/sf_G_DRIVE/Other Torrents/zkb-killmails.tar"
@@ -71,6 +75,10 @@ if __name__ == '__main__':
     # This folder should be empty to start
     
     destPathName = "/media/sf_G_DRIVE/zkb-Killmails/"
+    
+    #===========================================================================
+    # End of configurable parameters.
+    #===========================================================================
     
     # First unpack the tar file
     

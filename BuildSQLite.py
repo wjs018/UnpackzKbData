@@ -19,9 +19,6 @@ def parseJson(args):
 
         sqliteFilePath  The filepath to the sqlite database that data should be
                         written to.
-
-        queue           This is the queue that will be checked to monitor the
-                        progress of the operation.
     """
 
     jsonFileRoot, jsonFileName, sqliteFilePath = args
@@ -158,17 +155,32 @@ def parseJson(args):
         conn.close()
 
 if __name__ == '__main__':
+    
+    #===========================================================================
+    # Below are parameters to be changed for your particular setup.
+    #===========================================================================
 
     # Directory containing the sqlite database or where it should be placed
 
     destPathName = '/media/sf_D_DRIVE/zkb-Killmails/'
+    
+    # Name of the sqlite database, or what it should be called.
+    
     dbName = 'zkb-killmails.sqlite'
     dbPath = os.path.join(destPathName, dbName)
 
     # Directory containing all the unpacked .json File
     # For my filesystem, this is the same as above
 
-    jsonPathName = '/media/sf_D_DRIVE/zkb-Killmails/'
+    jsonPathName = '/media/sf_G_DRIVE/zkb-Killmails/'
+    
+    # Should parallel procesing be used? Recommended True
+    
+    parallel = True
+    
+    #===========================================================================
+    # End of configurable parameters.
+    #===========================================================================
 
     # Connect or create our database
 
@@ -208,15 +220,24 @@ if __name__ == '__main__':
 
     for root, dirs, files in os.walk(jsonPathName):
 
-        workers = mp.Pool()
+        if parallel:
 
-        # Construct the arguments for the function call
-
-        args = [(root, name, dbPath) for name in files]
-
-        # Call our pool workers to get them started
-
-        result = workers.map(parseJson, args)
+            workers = mp.Pool()
+    
+            # Construct the arguments for the function call
+    
+            args = [(root, name, dbPath) for name in files]
+    
+            # Call our pool workers to get them started
+    
+            result = workers.map(parseJson, args)
+            
+        if not parallel:
+            
+            for name in files:
+                
+                args = (root, name, dbPath)
+                result = parseJson(args)
 
     endTime = datetime.datetime.now()
     elapsed = endTime - startTime
